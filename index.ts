@@ -26,6 +26,9 @@ const run = () => {
 
       ctx.telegram.sendMessage(ctx.message.chat.id, resultStrings.join(', '));
     }
+    if (ctx.message.text.toLowerCase().includes('питерцы')) {
+      ctx.telegram.sendMessage(ctx.chat.id, 'Пидорцы*');
+    }
   })
 
   bot.launch();
