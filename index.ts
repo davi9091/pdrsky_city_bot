@@ -18,9 +18,13 @@ const run = () => {
     console.debug(ctx.chat.id, ctx.chat.type);
     const textMatch = ctx.message.text.match(regexCityPattern);
     if (textMatch && textMatch.length) {
-      const text = textMatch.toString();
-      const wordEnd = text.replace(regexCutPattern, '');
-      ctx.telegram.sendMessage(ctx.message.chat.id, `Пидорск${wordEnd}*`);
+      const resultStrings = textMatch.map(match => {
+        const text = match.toString();
+        const wordEnd = text.replace(regexCutPattern, '');
+        return `Пидорск${wordEnd}*`;
+      })
+
+      ctx.telegram.sendMessage(ctx.message.chat.id, resultStrings.join(', '));
     }
   })
 
