@@ -1,12 +1,12 @@
 
-#Pdrksy bot
+# Pdrksy bot
 
 This might look homophobic, but it's really not
 
-##Install
+## Install
 
 
-###Create a config.json file
+### Create a config.json file
 ```
 {
   "token": "your_token",
