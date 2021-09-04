@@ -1,9 +1,12 @@
 import {Telegraf} from 'telegraf';
 import config from './config.json';
 
+const complimentRegexp = new RegExp(/^(молодец|спасибо|хороший\wбот|thanks|good\wbot)/gi);
+const complimentStickerId = 'CAACAgIAAxkBAAIBkGEzz2hwgW9UhrLXLUVaJZ9BK2nrAAIOAAM3-_0oxYFS1bnA5nogBA';
+
 type Pattern = {
-  cut: RegExp;
   word: RegExp;
+  cut: RegExp;
   replace: (ending?: string) => string;
 }
 
@@ -22,7 +25,7 @@ const PATTERNS: Record<string, Pattern> = {
     cut: new RegExp(/питерц/gi),
     word: new RegExp(/питерц[\wа-я]*/gi),
     replace: () => `Пидоры`,
-  }
+  },
 }
 
 function textHandler (text: string, pattern: Pattern): string | undefined {
@@ -51,12 +54,21 @@ const run = () => {
   bot.start((ctx) => ctx.reply('Отличный город у вас тут'));
 
   bot.on('text', (ctx) => {
-    Object.values(PATTERNS).forEach((pattern) => {
-      const messageText = textHandler(ctx.message.text, pattern);
-      if (messageText) {
-        ctx.telegram.sendMessage(ctx.message.chat.id, messageText);
+    const text = ctx.message.text;
+
+    if (ctx.message.reply_to_message && ctx.message.reply_to_message.from?.id === config.botId) {
+      const complimentMatch = text.match(complimentRegexp);
+      if (complimentMatch && complimentMatch.length) {
+        ctx.telegram.sendSticker(ctx.message.chat.id, complimentStickerId);
       }
-    })
+    } else {
+      Object.values(PATTERNS).forEach((pattern) => {
+        const messageText = textHandler(text, pattern);
+        if (messageText) {
+          ctx.telegram.sendMessage(ctx.message.chat.id, messageText);
+        }
+      })
+    }
   });
 
   bot.launch();
