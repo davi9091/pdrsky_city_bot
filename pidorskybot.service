@@ -4,8 +4,7 @@ Description=Pidorsky bot
 [Service]
 ExecStart=/var/www/pdrsky_city_bot/run-bot.sh
 Restart=always
-User=nobody
-Group=nogroup
+User=pidorsky
 WorkingDirectory=/var/www/pdrsky_city_bot
 
 [Install]
