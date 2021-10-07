@@ -2,11 +2,11 @@
 Description=Pidorsky bot
 
 [Service]
-ExecStart=/var/www/pidorsky-bot/run-bot.sh
+ExecStart=/var/www/pdrsky_city_bot/run-bot.sh
 Restart=always
 User=nobody
 Group=nogroup
-WorkingDirectory=/var/www/pidorsky-bot
+WorkingDirectory=/var/www/pdrsky_city_bot
 
 [Install]
 WantedBy=multi-user.target
