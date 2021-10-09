@@ -10,7 +10,7 @@ This might look homophobic, but it's really not
 ```
 {
   "token": "your_token",
-  "botId": "your_bot_id"
+  "botId": your_bot_id // number
 }
 ```
 

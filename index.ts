@@ -28,10 +28,10 @@ const PATTERNS: Record<string, Pattern> = {
   },
 }
 
-function textHandler (text: string, pattern: Pattern): string | undefined {
+function textHandler (text: string, pattern: Pattern): string | void {
   const textMatch = text.match(pattern.word);
 
-  if (textMatch && textMatch.length) {
+  if (textMatch?.length) {
     const resultStrings = textMatch.map(match => {
         const text = match.toString();
         const wordEnd = text.replace(pattern.cut, '');
