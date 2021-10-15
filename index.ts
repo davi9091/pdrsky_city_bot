@@ -25,12 +25,10 @@ const run = () => {
         ctx.telegram.sendSticker(ctx.message.chat.id, complimentStickerId);
       }
     } else {
-      Object.values(PATTERNS).forEach((pattern) => {
-        const messageText = textHandler(text);
-        if (messageText.length) {
-          ctx.telegram.sendMessage(ctx.message.chat.id, messageText);
-        }
-      })
+      const messageText = textHandler(text);
+      if (messageText.length) {
+        ctx.telegram.sendMessage(ctx.message.chat.id, messageText);
+      }
     }
   });
 
