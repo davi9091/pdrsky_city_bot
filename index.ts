@@ -1,50 +1,13 @@
 import {Telegraf} from 'telegraf';
 import config from './config.json';
+import { PATTERNS } from './utils/constants';
+import { textHandler } from './utils/utils';
 
 const complimentRegexp = new RegExp(/^(молодец|спасибо|хороший\sбот|thanks|good\sbot)/gi);
 const complimentStickerId = 'CAACAgIAAxkBAAIBkGEzz2hwgW9UhrLXLUVaJZ9BK2nrAAIOAAM3-_0oxYFS1bnA5nogBA';
 
-type Pattern = {
-  word: RegExp;
-  cut: RegExp;
-  replace: (ending?: string) => string;
-}
-
-const PATTERNS: Record<string, Pattern> = {
-  CITY: {
-    cut: new RegExp(/питерск/gi),
-    word: new RegExp(/питерск[\wа-я]*/gi),
-    replace: (ending = 'кий') => `Пидорск${ending}*`,
-  },
-  PEOPLE_SINGULAR: {
-    cut: new RegExp(/питерец/gi),
-    word: new RegExp(/питерец/gi),
-    replace: () => 'Пидор*',
-  },
-  PEOPLE_PLURAL: {
-    cut: new RegExp(/питерц/gi),
-    word: new RegExp(/питерц[\wа-я]*/gi),
-    replace: (ending = 'ы') => `Пидор${ending}*`,
-  },
-}
-
-function textHandler (text: string, pattern: Pattern): string | void {
-  const textMatch = text.match(pattern.word);
-
-  if (textMatch?.length) {
-    const resultStrings = textMatch.map(match => {
-        const text = match.toString();
-        const wordEnd = text.replace(pattern.cut, '');
-        return pattern.replace(wordEnd);
-    });
-    
-    return resultStrings.join(', ');
-  }
-}
-
 const run = () => {
   const bot = new Telegraf(config.token);
-
 
   bot.command('quit', (ctx) => {
     ctx.telegram.leaveChat(ctx.message.chat.id);
@@ -63,8 +26,8 @@ const run = () => {
       }
     } else {
       Object.values(PATTERNS).forEach((pattern) => {
-        const messageText = textHandler(text, pattern);
-        if (messageText) {
+        const messageText = textHandler(text);
+        if (messageText.length) {
           ctx.telegram.sendMessage(ctx.message.chat.id, messageText);
         }
       })
